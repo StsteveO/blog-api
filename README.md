@@ -9,3 +9,4 @@ The Odin Project: Blog API
   ~~1. Set-up backend enviroment~~ 
   ~~2. Set up models~~
     3. Set up new routes in routes folder
+
