@@ -1,9 +1,41 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
+const session= require ("express-session");
+const passport= require("passport");
+const LocalStrategy= require ("passport-local").Strategy;
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 require("dotenv").config();
+
+//jwt 
+const JwtStrategy= require("passport-jwt").Strategy;
+const ExtractJwt= require("passport-jwt").ExtractJwt;
+const jwt= require("jsonwebtoken");
+
+const opts={
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: process.env.JWT_SECRET, //jwt secret key
+};
+
+passport.use(
+  new JwtStrategy(opts, (jwt_payload, done)=>{
+    // jwt_payload contains the decoded JWT token
+    // You should use it to extract user information and perform authentication
+
+    // Example: Check if a user with the ID in the JWT payload exists
+    // User.findById(jwt_payload.sub, (err, user) => {
+    //   if (err) {
+    //     return done(err, false); // Return an error if there's an issue
+    //   }
+    //   if (user) {
+    //     return done(null, user); // Return the user if found
+    //   } else {
+    //     return done(null, false); // Return false if no user is found
+    //   }
+    // });
+  })
+);
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -24,6 +56,12 @@ async function main() {
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
+//setup local strategy login
+// app.use(session({secret: "cats", resave: false, saveUninitialized: true}));
+// app.use(passport.initialize());
+// app.use(passport.session());
+// app.use(express.urlencoded({ extended: false }));
 
 app.use(logger('dev'));
 app.use(express.json());
