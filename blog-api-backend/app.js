@@ -1,5 +1,6 @@
 var createError = require('http-errors');
 var express = require('express');
+const cors= require("cors");
 var path = require('path');
 const session= require ("express-session");
 const passport= require("passport");
@@ -18,30 +19,37 @@ const opts={
   secretOrKey: process.env.JWT_SECRET, //jwt secret key
 };
 
-passport.use(
-  new JwtStrategy(opts, (jwt_payload, done)=>{
-    // jwt_payload contains the decoded JWT token
-    // You should use it to extract user information and perform authentication
+// passport.use(
+//   new JwtStrategy(opts, (jwt_payload, done)=>{
+//     // jwt_payload contains the decoded JWT token
+//     // You should use it to extract user information and perform authentication
 
-    // Example: Check if a user with the ID in the JWT payload exists
-    // User.findById(jwt_payload.sub, (err, user) => {
-    //   if (err) {
-    //     return done(err, false); // Return an error if there's an issue
-    //   }
-    //   if (user) {
-    //     return done(null, user); // Return the user if found
-    //   } else {
-    //     return done(null, false); // Return false if no user is found
-    //   }
-    // });
-  })
-);
+//     // Example: Check if a user with the ID in the JWT payload exists
+//     // User.findById(jwt_payload.sub, (err, user) => {
+//     //   if (err) {
+//     //     return done(err, false); // Return an error if there's an issue
+//     //   }
+//     //   if (user) {
+//     //     return done(null, user); // Return the user if found
+//     //   } else {
+//     //     return done(null, false); // Return false if no user is found
+//     //   }
+//     // });
+//   })
+// );
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const blogRouter= require("./routes/blogRouter")
 
 var app = express();
+
+app.use(cors()); //allow access from any front end site
+
+//ex. allow access only from "http://localhost:5173"
+// app.use(cors({
+//   origin: "http://localhost:5173"
+// }));
 
 // Set up mongoose connection
 const mongoose = require("mongoose");
@@ -54,8 +62,8 @@ async function main() {
 }
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+// app.set('views', path.join(__dirname, 'views'));
+// app.set('view engine', 'pug');
 
 //setup local strategy login
 // app.use(session({secret: "cats", resave: false, saveUninitialized: true}));
@@ -86,7 +94,8 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  // res.render('error');
+  res.status(500).json({ error: "Internal Server Error" });
 });
 
 module.exports = app;

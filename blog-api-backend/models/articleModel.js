@@ -39,4 +39,4 @@ ArticleSchema.virtual("url").get(function () {
   return `blog/article/${this._id}`;
 });
 
-mongoose.model.exports = mongoose.model("Article", ArticleSchema);
+module.exports = mongoose.model("Article", ArticleSchema);

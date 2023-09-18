@@ -16,4 +16,4 @@ CategorySchema.virtual("url").get(function(){
     return `blog/category/${this._id}`;
 })
 
-mongoose.model.exports = mongoose.model("Category", CategorySchema);
+module.exports = mongoose.model("Category", CategorySchema);

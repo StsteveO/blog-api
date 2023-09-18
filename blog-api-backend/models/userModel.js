@@ -7,7 +7,7 @@ const UserSchema = new Schema({
         required: true
     },
     bio: {
-        type: String,
+        type: Schema.Types.Mixed,
     },
     username: {
         type: String,
@@ -23,4 +23,6 @@ UserSchema.virtual("url").get(function () {
   return `blog/user/${this._id}`;
 });
 
-mongoose.model.exports = mongoose.model("User", AuthorSchema);
+module.exports = mongoose.model("User", UserSchema);
+
+
