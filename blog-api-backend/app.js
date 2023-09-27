@@ -13,30 +13,31 @@ require("dotenv").config();
 const JwtStrategy= require("passport-jwt").Strategy;
 const ExtractJwt= require("passport-jwt").ExtractJwt;
 const jwt= require("jsonwebtoken");
+const User= require("./models/userModel");
 
-const opts={
+const options={
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: process.env.JWT_SECRET, //jwt secret key
 };
 
-// passport.use(
-//   new JwtStrategy(opts, (jwt_payload, done)=>{
-//     // jwt_payload contains the decoded JWT token
-//     // You should use it to extract user information and perform authentication
+passport.use(
+  new JwtStrategy(options, (jwt_payload, done)=>{
+    // jwt_payload contains the decoded JWT token
+    // You should use it to extract user information and perform authentication
 
-//     // Example: Check if a user with the ID in the JWT payload exists
-//     // User.findById(jwt_payload.sub, (err, user) => {
-//     //   if (err) {
-//     //     return done(err, false); // Return an error if there's an issue
-//     //   }
-//     //   if (user) {
-//     //     return done(null, user); // Return the user if found
-//     //   } else {
-//     //     return done(null, false); // Return false if no user is found
-//     //   }
-//     // });
-//   })
-// );
+    // Example: Check if a user with the ID in the JWT payload exists
+    User.findById(jwt_payload.sub, (err, user) => {
+      if (err) {
+        return done(err, false); // Return an error if there's an issue
+      }
+      if (user) {
+        return done(null, user); // Return the user if found
+      } else {
+        return done(null, false); // Return false if no user is found
+      }
+    });
+  })
+);
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');

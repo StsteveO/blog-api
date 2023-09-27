@@ -69,10 +69,13 @@ exports.sign_up_form_post = [
         });
 
         await user.save();
-        res.redirect("/");
+        res.status(200).json({ success: true, message: "User registration successful"});
+        // res.redirect("/");
 
       } catch (err) {
-        return next(err);
+        // return next(err);
+        console.error(err);
+        res.status(500).json({ errors: "Internal Server Error" });
       }
     }
   }),

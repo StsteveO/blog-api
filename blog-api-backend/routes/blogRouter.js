@@ -6,6 +6,7 @@ const artical_controller = require("../controller/articalController");
 const category_controller = require("../controller/categoryController");
 const sign_up_controller = require("../controller/signUpController");
 const login_controller = require("../controller/loginController");
+const user_controller= require("../controller/userController")
 
 // we have article, user, and category models
 
@@ -14,17 +15,21 @@ router.get("/", into_page_controller.index) //index/home page with ALL ACTIVE AR
 
 router.get("/articals/:id", artical_controller.specific_artical_get) //specific artical once clicked
 
-router.get("/create_article_form", artical_controller.create_artical_form_get) //get form for new article
+router.get("/article_list", artical_controller.artical_list_get) //get form for new article
 
-router.post("/create_article_form", artical_controller.create_artical_form_post); //enter form for new article
+router.get("/user_data", user_controller.user_data_get) //get current users info
 
-router.get("/category", category_controller.category_list_get) //category list
+router.post("/artical_create", artical_controller.artical_create_form_post); //enter form for new article
+
+router.get("/category_list", category_controller.category_list_get) //category list USED & DONE!
 
 router.get("/categories/:id", category_controller.specific_category_get); //specific category
 
 router.get("/create_category_form", category_controller.create_category_form_get)
 
-router.post("/create_category_form", category_controller.create_category_form_post);
+//router.post("/create_category_form", category_controller.create_category_form_post);
+
+router.post("/category_create", category_controller.category_create_form_post); //USED & DONE!
 
 router.get("/login", login_controller.login_form_get) //get login form
 
