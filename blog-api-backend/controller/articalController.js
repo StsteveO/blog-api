@@ -1,19 +1,37 @@
 const asyncHandler = require("express-async-handler");
-const verifyToken= require("../middleware/verifyToken");
+const verifyToken = require("../middleware/verifyToken");
 const { body, validationResult } = require("express-validator");
 require("dotenv").config();
-const User= require("../models/userModel");
-const Article= require("../models/articleModel");
+const User = require("../models/userModel");
+const Article = require("../models/articleModel");
 //import any models that needs to be interacted with
+
+exports.artical_client_get = asyncHandler(async (req, res, next) => {
+  try {
+    console.log("fetching...");
+    const clientArticals = await Article.find({
+      article_is_active: true,
+    })
+      .populate("author")
+      .populate("category")
+      .exec();
+    res.status(200).json(clientArticals);
+    console.log("fetch successful");
+  } catch (error) {
+    console.log("failed to fetch");
+    res.status(500).json({ errors: "Internal Server Error" });
+  }
+});
 
 exports.specific_artical_get = function (req, res, next) {
   res.send(`This gets a specific artical; artical ${req.params.id}`);
 };
 
 exports.artical_list_get = [
-  verifyToken, asyncHandler(async (req, res, next)=>{
-    res.status(200).json(req.user)
-  })
+  verifyToken,
+  asyncHandler(async (req, res, next) => {
+    res.status(200).json(req.user);
+  }),
 ];
 
 exports.artical_create_form_post = [
@@ -49,14 +67,15 @@ exports.artical_create_form_post = [
     .escape(),
 
   // process req post sanitation and validation
-  asyncHandler( async( req, res, next )=>{
-    const errors= validationResult(req);
+  
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
 
-    if(!errors.isEmpty()){
+    if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
-    }else{
-      try{
-        const newSubmittedArticle= new Article({
+    } else {
+      try {
+        const newSubmittedArticle = new Article({
           title: req.body.title,
           author: req.body.authorId,
           category: req.body.category,
@@ -68,10 +87,13 @@ exports.artical_create_form_post = [
         });
 
         await newSubmittedArticle.save();
-        res.status(200).json({ success: true, message: "New article successfull."});
-      }catch (err){
+        res
+          .status(200)
+          .json({ success: true, message: "New article successfull." });
+      } catch (err) {
+        console.log(err);
         res.status(500).json({ errors: "Internal Server Error" });
       }
     }
-  })
+  }),
 ];

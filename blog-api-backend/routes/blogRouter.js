@@ -13,11 +13,15 @@ const user_controller= require("../controller/userController")
 // http://localhost:3000/blog......
 router.get("/", into_page_controller.index) //index/home page with ALL ACTIVE ARTICALS
 
+router.get("/articles_client", artical_controller.artical_client_get);
+
+router.get("/articles_user", user_controller.article_user_get);
+
 router.get("/articals/:id", artical_controller.specific_artical_get) //specific artical once clicked
 
 router.get("/article_list", artical_controller.artical_list_get) //get form for new article
 
-router.get("/user_data", user_controller.user_data_get) //get current users info
+// router.get("/user_data", user_controller.user_data_get) //get current users info
 
 router.post("/artical_create", artical_controller.artical_create_form_post); //enter form for new article
 
@@ -38,5 +42,6 @@ router.post("/login", login_controller.login_form_post) //enter login form
 router.get("/sign_up", sign_up_controller.sign_up_form_get) //get signup form
 
 router.post("/sign_up", sign_up_controller.sign_up_form_post); //enter signup form
+
 
 module.exports= router;
