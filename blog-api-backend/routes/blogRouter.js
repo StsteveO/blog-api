@@ -1,7 +1,6 @@
 const express= require("express");
 const router= express.Router();
 
-const into_page_controller= require("../controller/introPageController")
 const artical_controller = require("../controller/articalController");
 const category_controller = require("../controller/categoryController");
 const sign_up_controller = require("../controller/signUpController");
@@ -11,8 +10,6 @@ const user_controller= require("../controller/userController")
 // we have article, user, and category models
 
 // http://localhost:3000/blog......
-router.get("/", into_page_controller.index) //index/home page with ALL ACTIVE ARTICALS
-
 router.get("/articles_client", artical_controller.artical_client_get);
 
 router.get("/articles_user", user_controller.article_user_get);
