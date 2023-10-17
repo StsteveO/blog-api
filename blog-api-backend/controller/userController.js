@@ -23,11 +23,3 @@ exports.article_user_get = [
     }
   }),
 ];
-
-// exports.user_data_get = [
-//   console.log("backend error!"),
-//   verifyToken,
-//   asyncHandler(async (req, res, next) => {
-//     res.status(200).json(req.user);
-//   }),
-// ];

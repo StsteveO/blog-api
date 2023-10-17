@@ -8,7 +8,7 @@ const Article = require("../models/articleModel");
 
 exports.artical_client_get = asyncHandler(async (req, res, next) => {
   try {
-    console.log("fetching...");
+    // console.log("fetching...");
     const clientArticals = await Article.find({
       article_is_active: true,
     })
@@ -16,9 +16,9 @@ exports.artical_client_get = asyncHandler(async (req, res, next) => {
       .populate("category")
       .exec();
     res.status(200).json(clientArticals);
-    console.log("fetch successful");
+    // console.log("fetch successful");
   } catch (error) {
-    console.log("failed to fetch");
+    // console.log("failed to fetch");
     res.status(500).json({ errors: "Internal Server Error" });
   }
 });
@@ -90,6 +90,36 @@ exports.artical_create_form_post = [
         res
           .status(200)
           .json({ success: true, message: "New article successfull." });
+      } catch (err) {
+        console.log(err);
+        res.status(500).json({ errors: "Internal Server Error" });
+      }
+    }
+  }),
+];
+
+exports.article_delete_post = [
+  verifyToken,
+  
+  //validate and sanitize fields
+  body("articleToDelete")
+    .isLength({ min: 1 })
+    .withMessage("Missing article to delete.")
+    .trim()
+    .escape(),
+
+  // process req post sanitation and validation
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    } else {
+      try {
+        await Article.findByIdAndRemove(req.body.articleToDelete);
+        res
+          .status(200)
+          .json({ success: true, message: "Article Successfully Deleted." });
       } catch (err) {
         console.log(err);
         res.status(500).json({ errors: "Internal Server Error" });

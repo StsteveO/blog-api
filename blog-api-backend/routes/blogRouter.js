@@ -14,6 +14,8 @@ router.get("/articles_client", artical_controller.artical_client_get);
 
 router.get("/articles_user", user_controller.article_user_get);
 
+router.post("/article_delete", artical_controller.article_delete_post);
+
 router.get("/articals/:id", artical_controller.specific_artical_get) //specific artical once clicked
 
 router.get("/article_list", artical_controller.artical_list_get) //get form for new article
