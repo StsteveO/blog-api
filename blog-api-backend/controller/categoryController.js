@@ -11,7 +11,9 @@ exports.category_list_get = [verifyToken, asyncHandler(async (req, res, next) =>
   // console.log(req.headers.authorization.split(" ")[1]);
   //get info needed
   try {
-    const allCategories = await Category.find({});
+    const allCategories = await Category.find({})
+    .sort({name: 1})
+    .exec();
     // console.log("backend is working");
     res.status(200).json(allCategories);
   } catch (error) {
