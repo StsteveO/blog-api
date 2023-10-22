@@ -20,6 +20,8 @@ router.post("/article_update", artical_controller.article_update_post);
 
 router.post("/category_delete", category_controller.category_delete_post);
 
+router.post("/category_update", category_controller.category_update_post);
+
 router.get("/articals/:id", artical_controller.specific_artical_get) //specific artical once clicked
 
 router.get("/article_list", artical_controller.artical_list_get) //get form for new article

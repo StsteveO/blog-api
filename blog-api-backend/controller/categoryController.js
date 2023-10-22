@@ -32,6 +32,55 @@ exports.create_category_form_get = function (req, res, next) {
   res.send("This gets an artical creation form.");
 };
 
+exports.category_update_post=[
+  //validate and sanitize fields
+  // categoryName
+  // categorySynopsis
+  body("categoryName")
+    .isLength({ min: 1 })
+    .withMessage("Please enter a name.")
+    .trim()
+    .escape(),
+  
+  body("categorySynopsis")
+    .isLength({ min: 1 })
+    .withMessage("Please enter a synopsis about the category.")
+    .trim()
+    .escape(),
+
+  // process req post sanitation and validation
+
+  asyncHandler(async (req, res, next)=>{
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      console.log(errors);
+      return res.status(400).json({ errors: errors.array() });
+    }else{
+      try{
+        const newSubmittedCategory= new Category({
+          name: req.body.categoryName,
+          synopsis: req.body.categorySynopsis,
+          _id: req.body.categoryId,
+        })
+
+        await Category.findByIdAndUpdate(
+          req.body.categoryId,
+          newSubmittedCategory,
+          {}
+        )
+        res
+          .status(200)
+          .json({ success: true, message: "Edit category successfull." });
+      }catch(err) {
+        // console.log(err);
+        // console.log("Error occured");
+        res.status(500).json({ errors: "Internal Server Error" });
+      }
+    }
+  })
+]
+
 exports.category_delete_post=[
   verifyToken,
 
