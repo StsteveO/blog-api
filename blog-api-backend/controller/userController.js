@@ -115,3 +115,18 @@ exports.account_edit_post = [
     }
   }),
 ];
+
+exports.account_delete_get=[
+  verifyToken,
+  asyncHandler(async (req, res, next) => {
+    try {
+      await Article.deleteMany({ author: req.user.userId });
+      await User.findByIdAndRemove(req.user.userId)
+      res
+        .status(200)
+        .json({ success: true, message: "Account delete successfull." });
+    } catch (error) {
+      res.status(500).json({ errors: "Internal Server Error" });
+    }
+  }),
+]

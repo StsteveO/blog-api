@@ -26,6 +26,8 @@ router.get("/account_edit", user_controller.account_edit_get);
 
 router.post("/account_update", user_controller.account_edit_post);
 
+router.get("/account_delete", user_controller.account_delete_get);
+
 router.get("/articals/:id", artical_controller.specific_artical_get) //specific artical once clicked
 
 router.get("/article_list", artical_controller.artical_list_get) //get form for new article
