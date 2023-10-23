@@ -8,6 +8,8 @@ const LocalStrategy= require ("passport-local").Strategy;
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 require("dotenv").config();
+const compression= require("compression");
+const helmet= require("helmet");
 
 //jwt 
 const JwtStrategy= require("passport-jwt").Strategy;
@@ -45,6 +47,14 @@ const blogRouter= require("./routes/blogRouter")
 
 var app = express();
 
+const RateLimit = require("express-rate-limit");
+const limiter = RateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 50,
+});
+// Apply rate limiter to all requests
+app.use(limiter);
+
 app.use(cors()); //allow access from any front end site
 
 //ex. allow access only from "http://localhost:5173"
@@ -55,7 +65,8 @@ app.use(cors()); //allow access from any front end site
 // Set up mongoose connection
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
-const mongoDB = process.env.mongoConnectionStr;
+const dev_db_url = process.env.mongoConnectionStr;
+const mongoDB = process.env.MONGODB_URI || dev_db_url;
 
 main().catch((err) => console.log(err));
 async function main() {
@@ -72,6 +83,8 @@ async function main() {
 // app.use(passport.session());
 // app.use(express.urlencoded({ extended: false }));
 
+app.use(compression()); //compress all routes
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -81,6 +94,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use("/blog", blogRouter);
+
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      "script-src": ["'self'", "code.jquery.com", "cdn.jsdelivr.net"],
+    },
+  })
+);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
