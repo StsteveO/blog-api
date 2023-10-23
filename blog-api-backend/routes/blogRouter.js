@@ -10,6 +10,7 @@ const user_controller= require("../controller/userController")
 // we have article, user, and category models
 
 // http://localhost:3000/blog......
+
 router.get("/articles_client", artical_controller.artical_client_get);
 
 router.get("/articles_user", user_controller.article_user_get);
