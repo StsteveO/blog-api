@@ -17,10 +17,16 @@ const ExtractJwt= require("passport-jwt").ExtractJwt;
 const jwt= require("jsonwebtoken");
 const User= require("./models/userModel");
 
-const options={
+// const dev_db_url = process.env.mongoConnectionStr;
+// const mongoDB = process.env.MONGODB_URI || dev_db_url;
+
+require("dotenv").config();
+const options = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: process.env.JWT_SECRET, //jwt secret key
 };
+
+console.log("JWT Secret Key:", process.env.JWT_SECRET);
 
 passport.use(
   new JwtStrategy(options, (jwt_payload, done)=>{
@@ -46,6 +52,8 @@ var usersRouter = require('./routes/users');
 const blogRouter= require("./routes/blogRouter")
 
 var app = express();
+
+app.use(cors()); //allow access from any front end site
 
 const RateLimit = require("express-rate-limit");
 const limiter = RateLimit({
