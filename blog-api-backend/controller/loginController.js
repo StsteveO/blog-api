@@ -42,13 +42,17 @@ exports.login_form_post = [
         }
 
         //if user found/authenticated creat and send jwt
-        const token= jwt.sign({
-          userId: user._id,
-          username: user.username,
-          firstName: user.first_name,
-        }, process.env.JWT_SECRET, {
-          expiresIn: "3h", //token expiration time
-        });
+        const token = jwt.sign(
+          {
+            userId: user._id,
+            username: user.username,
+            firstName: user.first_name,
+          },
+          process.env.JWT_SECRET_RAILWAY || process.env.JWT_SECRET,
+          {
+            expiresIn: "3h", //token expiration time
+          }
+        );
 
         res.status(200).json({ token });
       } catch (error){

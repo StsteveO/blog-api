@@ -54,7 +54,7 @@ const blogRouter= require("./routes/blogRouter")
 
 var app = express();
 
-app.use(cors()); //allow access from any front end site
+// app.use(cors()); //allow access from any front end site
 
 const RateLimit = require("express-rate-limit");
 const limiter = RateLimit({

@@ -10,6 +10,7 @@ const user_controller= require("../controller/userController")
 // we have article, user, and category models
 
 // http://localhost:3000/blog......
+// http://blog-api-production-f2ce.up.railway.app/blog......
 
 router.get("/articles_client", artical_controller.artical_client_get);
 

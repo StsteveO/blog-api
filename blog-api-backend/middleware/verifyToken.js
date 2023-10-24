@@ -1,7 +1,7 @@
 // verifyTokenMiddleware.js
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const secretKey = process.env.JWT_SECRET; // Your JWT secret key
+const secretKey = process.env.JWT_SECRET_RAILWAY || process.env.JWT_SECRET; // Your JWT secret key
 
 function verifyToken(req, res, next) {
   // console.log("verifyToken function is called")
