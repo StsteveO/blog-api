@@ -27,6 +27,7 @@ const options = {
 };
 
 console.log("JWT Secret Key:", process.env.JWT_SECRET);
+console.log("JWT Secret RAILWAY Key:", process.env.railway);
 
 passport.use(
   new JwtStrategy(options, (jwt_payload, done)=>{
