@@ -23,7 +23,7 @@ const User= require("./models/userModel");
 require("dotenv").config();
 const options = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.JWT_SECRET, //jwt secret key
+  secretOrKey: process.env.JWT_SECRET_RAILWAY || process.env.JWT_SECRET, //jwt secret key
 };
 
 console.log("JWT Secret Key:", process.env.JWT_SECRET);
